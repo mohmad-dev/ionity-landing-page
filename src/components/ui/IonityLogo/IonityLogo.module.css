@@ -1,0 +1,22 @@
+.logo {
+  display: inline-block;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+/* 'I' bar accent */
+.logoI {
+  transition: fill var(--duration-base) var(--ease-standard);
+}
+
+/* 'O' circle */
+.logoO {
+  transition: stroke var(--duration-base) var(--ease-standard);
+}
+
+/* Nav hover — parent link hovering makes O match accent */
+a:hover .logoO,
+button:hover .logoO {
+  stroke: var(--accent-100);
+}

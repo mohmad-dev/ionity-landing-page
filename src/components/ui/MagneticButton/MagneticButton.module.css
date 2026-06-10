@@ -1,0 +1,5 @@
+.magnetic {
+  display: inline-block;
+  transform: translate(var(--mag-x, 0px), var(--mag-y, 0px));
+  transition: transform var(--duration-base) var(--ease-standard);
+}

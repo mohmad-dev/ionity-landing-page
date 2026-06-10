@@ -1,0 +1,75 @@
+.section {
+  padding-block: var(--space-24);
+  background: var(--bg-root);
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+  align-items: flex-start;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-20);
+  }
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+}
+
+.right {
+  width: 100%;
+}
+
+.valuesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.valueCard {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-8);
+  transition: border-color var(--duration-base) var(--ease-standard), 
+              background-color var(--duration-base) var(--ease-standard);
+  position: relative;
+  overflow: hidden;
+}
+
+.valueCard:hover {
+  background: var(--bg-subtle);
+  border-color: var(--border-strong);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.number {
+  font-size: 1.125rem;
+  font-weight: 700;
+  padding: var(--space-1) var(--space-3);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}

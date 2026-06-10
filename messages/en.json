@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "title": "Ionity — Engineering the Future of Software",
+    "description": "Premium software engineering for high-performance web systems and SaaS."
+  },
+  "nav": {
+    "features": "Features",
+    "product": "Platform",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Get Started"
+  },
+  "hero": {
+    "overline": "PREMIUM SOFTWARE ENGINEERING",
+    "title": "We Build Systems That Scale",
+    "subtitle": "High-performance web platforms engineered for the world's most ambitious companies.",
+    "cta_primary": "Explore Platform",
+    "cta_secondary": "Learn More",
+    "metric1_val": "99.99%",
+    "metric1_lbl": "Uptime SLA",
+    "metric2_val": "<50ms",
+    "metric2_lbl": "Global Latency",
+    "metric3_val": "10×",
+    "metric3_lbl": "Faster Deploys"
+  },
+  "socialProof": {
+    "title": "Trusted by industry leaders"
+  },
+  "problem": {
+    "overline": "The Challenge",
+    "title": "Legacy Systems Are Slowing You Down",
+    "old_way": "The Old Way",
+    "old_desc": "Clunky interfaces, disconnected databases, and frequent downtime causing frustration.",
+    "new_way": "The Ionity Way",
+    "new_desc": "Unified architecture, instant response times, and an interface your team will love."
+  },
+  "features": {
+    "overline": "Core Capabilities",
+    "title": "Built for Modern Workflows",
+    "subtitle": "We use the best technologies of 2026 to deliver unmatched speed, reliability, and scale.",
+    "items": [
+      {
+        "title": "Zero-CLS Architecture",
+        "description": "Sub-second load times with pixel-perfect stability."
+      },
+      {
+        "title": "Global Edge Delivery",
+        "description": "Data served securely from the edge, closer to your users."
+      },
+      {
+        "title": "Scalable Infrastructure",
+        "description": "Cloud-native architectures built to handle millions of requests."
+      },
+      {
+        "title": "Developer Experience",
+        "description": "Built with modern primitives that your engineering team will love."
+      },
+      {
+        "title": "Real-time Sync",
+        "description": "Sub-millisecond data synchronization across all clients via WebSockets."
+      },
+      {
+        "title": "Bank-Grade Security",
+        "description": "End-to-end encryption and strict HIPAA compliance out of the box."
+      }
+    ]
+  },
+  "howItWorks": {
+    "overline": "Our Process",
+    "title": "From Concept to Scale",
+    "steps": [
+      "Discovery & Architecture",
+      "Iterative Engineering",
+      "Deployment & Scaling"
+    ],
+    "step_details": [
+      {
+        "title": "1. Architect",
+        "desc": "We map out your data model and system topology using cloud-native paradigms."
+      },
+      {
+        "title": "2. Build",
+        "desc": "Iterative development with zero-downtime continuous integration."
+      },
+      {
+        "title": "3. Scale",
+        "desc": "Deploy to Edge networks with autoscaling infrastructure."
+      }
+    ]
+  },
+  "metrics": {
+    "overline": "By The Numbers",
+    "title": "Engineered for Extreme Performance",
+    "stat1_value": "99.99%",
+    "stat1_label": "Uptime SLA",
+    "stat2_value": "<50ms",
+    "stat2_label": "Global Latency",
+    "stat3_value": "10x",
+    "stat3_label": "Faster Deployments"
+  },
+  "product": {
+    "overline": "Flagship Product",
+    "title": "Meet Cura",
+    "subtitle": "The ultimate clinic management system.",
+    "f1_title": "Patient Portal",
+    "f1_desc": "Self-serve booking and records.",
+    "f2_title": "Smart Billing",
+    "f2_desc": "Automated claims and invoicing.",
+    "f3_title": "Telehealth",
+    "f3_desc": "Integrated video consultations."
+  },
+  "testimonials": {
+    "overline": "CLIENT SUCCESS",
+    "title": "What ambitious teams say about us",
+    "items": [
+      {
+        "quote": "Ionity transformed our legacy platform into a lightning-fast modern application. Our conversion rates doubled within a month of launch.",
+        "author": "Sarah Jenkins",
+        "role": "CTO, TechCorp"
+      },
+      {
+        "quote": "The team's grasp of modern web architecture is unmatched. They don't just write code; they engineer business solutions that scale effortlessly.",
+        "author": "Marcus Chen",
+        "role": "Founder, NovaHQ"
+      },
+      {
+        "quote": "We needed a platform that could handle 10x our current volume without a sweat. Ionity delivered a system that is both beautiful and bulletproof.",
+        "author": "Elena Rostova",
+        "role": "VP Engineering, HealthScale"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to scale?",
+    "subtitle": "Join the companies building the future with Ionity.",
+    "primary": "Start a Project",
+    "secondary": "View Documentation"
+  },
+  "about": {
+    "overline": "Who We Are",
+    "title": "We engineer high-performance systems for modern businesses.",
+    "description": "Ionity is a premier software engineering startup. We specialize in building cloud-native SaaS platforms, real-time sync systems, and premium web architectures that help businesses scale securely and rapidly.",
+    "value1_title": "Edge-First Architectures",
+    "value1_desc": "Deploying code closer to users to guarantee sub-50ms latencies and instant interaction.",
+    "value2_title": "Strict Type Safety & CI/CD",
+    "value2_desc": "Strict testing frameworks and TypeScript ensure your system remains stable as it scales.",
+    "value3_title": "Bespoke Design Systems",
+    "value3_desc": "Pixel-perfect interfaces tailored to your brand, ensuring stunning, conversion-focused user journeys."
+  },
+  "pricing": {
+    "overline": "Flexible Tiers",
+    "title": "Designed for Startups and Scale-ups",
+    "subtitle": "Select a plan that suits your product development phase, from MVPs to high-scale enterprise platforms.",
+    "popular_label": "Most Popular",
+    "tier1_name": "MVP / Startup",
+    "tier1_desc": "For early-stage startups needing a functional prototype to raise capital.",
+    "tier1_price": "$9,500",
+    "tier1_period": "/ one-time",
+    "tier1_f1": "Complete high-fidelity design system",
+    "tier1_f2": "Fully functional responsive Next.js MVP",
+    "tier1_f3": "Vercel edge network deployment",
+    "tier1_f4": "30-day post-launch support",
+    "tier1_cta": "Launch MVP",
+    "tier2_name": "Scale-up / Growth",
+    "tier2_desc": "For established platforms looking to scale their infrastructure and UI.",
+    "tier2_price": "$18,000",
+    "tier2_period": "/ design & dev",
+    "tier2_f1": "Scalable SaaS & cloud architecture",
+    "tier2_f2": "GSAP dynamic visual animations",
+    "tier2_f3": "Real-time sync / WebSocket gateway",
+    "tier2_f4": "Strict automated testing suite",
+    "tier2_f5": "90-day post-launch optimization SLA",
+    "tier2_cta": "Scale Platform",
+    "tier3_name": "Enterprise Custom",
+    "tier3_desc": "For companies requiring maximum SLA guarantees, custom cloud, and compliance.",
+    "tier3_price": "Custom",
+    "tier3_period": "/ project basis",
+    "tier3_f1": "HIPAA / Bank-grade security compliance",
+    "tier3_f2": "Dedicated devops & serverless setups",
+    "tier3_f3": "24/7 priority support & SLA monitoring",
+    "tier3_f4": "Code audits & architecture consulting",
+    "tier3_cta": "Contact Enterprise"
+  },
+  "contact": {
+    "overline": "Get in touch",
+    "title": "Let's build something exceptional together",
+    "subtitle": "Ready to scale your next digital product? Send us a message and our team will get back to you within 24 hours.",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "label_name": "Full Name",
+    "placeholder_name": "Enter your name",
+    "label_email": "Email Address",
+    "placeholder_email": "Enter your email",
+    "label_message": "Project Details",
+    "placeholder_message": "Tell us about your project, technology stack, and timeline...",
+    "submit": "Send Message via WhatsApp",
+    "success_title": "Redirecting...",
+    "success_desc": "Connecting you to our WhatsApp Business portal to send your details directly."
+  },
+  "footer": {
+    "description": "Premium software engineering for high-performance web systems and SaaS.",
+    "copyright": "© 2026 Ionity Inc. All rights reserved.",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "careers": "Careers",
+    "pricing": "Pricing",
+    "links": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  }
+}

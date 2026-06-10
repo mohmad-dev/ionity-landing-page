@@ -1,0 +1,251 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding-block: var(--space-4);
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.scrolled {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-block: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+
+.logoMark {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+}
+
+.logoI {
+  width: 4px;
+  height: 100%;
+  background: var(--text-primary);
+  border-radius: 2px;
+}
+
+.logoO {
+  width: 20px;
+  height: 20px;
+  border: 4px solid var(--accent-100);
+  border-radius: 50%;
+}
+
+.logoText {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+/* Nav */
+.nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+}
+
+.link {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-2);
+}
+
+.link:hover {
+  color: var(--text-primary);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.cta {
+  display: inline-flex;
+}
+
+.desktopActions {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktopActions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+}
+
+/* Hamburger Toggle Button */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 100;
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburgerBar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center;
+}
+
+.hamburgerActive .hamburgerBar:first-child {
+  transform: rotate(45deg) translate(2px, 0px);
+}
+
+.hamburgerActive .hamburgerBar:nth-child(2) {
+  width: 0%;
+  opacity: 0;
+}
+
+.hamburgerActive .hamburgerBar:last-child {
+  transform: rotate(-45deg) translate(2px, 0px);
+}
+
+/* Header Open State */
+.headerOpen {
+  background: var(--bg-root) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+/* Mobile Menu Fullscreen Overlay */
+.mobileMenu {
+  position: fixed;
+  top: 72px; /* height of header */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 72px);
+  background: var(--bg-root);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: var(--space-12) var(--space-6);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.3s;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow-y: auto;
+}
+
+.mobileMenuOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 320px;
+}
+
+.mobileLink {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  width: 100%;
+  text-align: center;
+  padding-block: var(--space-2);
+}
+
+.mobileLink:hover {
+  color: var(--accent-100);
+}
+
+.mobileSeparator {
+  width: 100%;
+  height: 1px;
+  background: var(--border-subtle);
+  margin-block: var(--space-4);
+}
+
+.mobileActionsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.mobileSwitcher {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.mobileCta {
+  width: 100%;
+  display: inline-flex !important;
+  justify-content: center;
+}

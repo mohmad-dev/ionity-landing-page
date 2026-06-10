@@ -1,0 +1,99 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  min-height: 48px;
+  min-width: 48px;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.primary {
+  background: var(--accent-gradient);
+  color: #fff;
+  border: none;
+}
+
+.primary:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.primary:active:not(:disabled) {
+  opacity: 0.75;
+}
+
+.secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+}
+
+.ghost:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+}
+
+/* Sizes */
+.sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-caption);
+}
+
+.md {
+  padding: var(--space-3) var(--space-6);
+  font-size: 1rem; /* Need specific value for buttons */
+}
+
+.lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-h3);
+}
+
+/* Loading State */
+.loading .content {
+  opacity: 0; /* Hide text, but keep its width */
+}
+
+.spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid currentColor;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}

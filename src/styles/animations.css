@@ -1,0 +1,93 @@
+/* ============================================================
+   IONITY — ANIMATIONS (CSS-only)
+   Philosophy: Fade + translate only. 200ms max. No bounce.
+   Uses IntersectionObserver data-attributes for triggers.
+   ============================================================ */
+
+/* ── SCROLL-REVEAL SYSTEM ──────────────────────────────────── */
+
+/* Elements start invisible and shifted */
+[data-reveal] {
+  opacity: 0;
+  translate: 0 var(--reveal-distance);
+  transition:
+    opacity   var(--duration-slow) var(--ease-standard),
+    translate var(--duration-slow) var(--ease-standard);
+}
+
+/* Stagger delays for children */
+[data-reveal="stagger"] > * {
+  opacity: 0;
+  translate: 0 var(--reveal-distance);
+  transition:
+    opacity   var(--duration-slow) var(--ease-standard),
+    translate var(--duration-slow) var(--ease-standard);
+}
+
+/* When in-view (JS adds this class via IntersectionObserver) */
+[data-reveal].is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+[data-reveal="stagger"].is-visible > * {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Stagger delay via nth-child */
+[data-reveal="stagger"].is-visible > *:nth-child(1)  { transition-delay: 0ms;   }
+[data-reveal="stagger"].is-visible > *:nth-child(2)  { transition-delay: 60ms;  }
+[data-reveal="stagger"].is-visible > *:nth-child(3)  { transition-delay: 120ms; }
+[data-reveal="stagger"].is-visible > *:nth-child(4)  { transition-delay: 180ms; }
+[data-reveal="stagger"].is-visible > *:nth-child(5)  { transition-delay: 240ms; }
+[data-reveal="stagger"].is-visible > *:nth-child(6)  { transition-delay: 300ms; }
+[data-reveal="stagger"].is-visible > *:nth-child(7)  { transition-delay: 360ms; }
+[data-reveal="stagger"].is-visible > *:nth-child(8)  { transition-delay: 420ms; }
+
+/* ── FADE ONLY variant ────────────────────────────────────── */
+[data-reveal="fade"] {
+  opacity: 0;
+  translate: none;
+  transition: opacity var(--duration-slow) var(--ease-standard);
+}
+[data-reveal="fade"].is-visible {
+  opacity: 1;
+}
+
+/* ── PREFERS-REDUCED-MOTION ────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal="stagger"] > *,
+  [data-reveal="fade"] {
+    opacity: 1 !important;
+    translate: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── UTILITY KEYFRAMES ─────────────────────────────────────── */
+
+/* Loader progress bar */
+@keyframes progress-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* Horizontal marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Blink cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}

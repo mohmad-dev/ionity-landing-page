@@ -1,0 +1,35 @@
+.orb {
+  position: absolute;
+  width: var(--orb-size, 600px);
+  height: var(--orb-size, 600px);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  pointer-events: none;
+  animation: float 10s ease-in-out infinite, pulse 8s ease-in-out infinite;
+}
+
+/* Colors */
+.mint {
+  background: radial-gradient(circle, var(--accent-100) 0%, transparent 70%);
+}
+
+.cool {
+  background: radial-gradient(circle, #1a3a4a 0%, transparent 70%);
+}
+
+/* Positions */
+.left {
+  left: 0;
+  transform: translateX(-50%);
+}
+
+.right {
+  right: 0;
+  transform: translateX(50%);
+}
+
+.center {
+  left: 50%;
+  transform: translateX(-50%);
+}

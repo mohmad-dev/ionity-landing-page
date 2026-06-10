@@ -1,0 +1,15 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text-tertiary);
+  margin-block-end: var(--space-4);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-100);
+  box-shadow: 0 0 8px var(--accent-glow);
+}

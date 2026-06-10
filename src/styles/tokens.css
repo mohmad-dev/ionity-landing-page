@@ -1,0 +1,105 @@
+/* ============================================================
+   IONITY DESIGN SYSTEM — ULTRA-MINIMALIST EDITORIAL TOKENS
+   Philosophy: Border-first depth. Typography-driven luxury.
+   No shadows. No glow. Precision over decoration.
+   ============================================================ */
+
+:root {
+  /* ── BACKGROUNDS ────────────────────────────────────────── */
+  --bg-root:      #f7f7f5;   /* Warm off-white — editorial paper */
+  --bg-primary:   #ffffff;   /* Pure white — card surfaces       */
+  --bg-elevated:  #f2f2f0;   /* Slightly sunken — code blocks    */
+  --bg-subtle:    #ebebea;   /* Hover states, subtle fills       */
+  --bg-inverse:   #0a0a0a;   /* Used for CTA sections            */
+  --bg-glass:     rgba(247, 247, 245, 0.85); /* Semi-transparent warm glass */
+
+  /* ── ACCENT — used sparingly ────────────────────────────── */
+  --accent-100:   #00a868;   /* Primary brand green — buttons only */
+  --accent-200:   #007a4c;   /* Hover state                        */
+  --accent-dim:   rgba(0, 168, 104, 0.08);
+  --accent-border: rgba(0, 168, 104, 0.2);
+
+  /* ── TYPOGRAPHY ─────────────────────────────────────────── */
+  --text-primary:   #0a0a0a;  /* Near-black — maximum authority */
+  --text-secondary: #525252;  /* Mid-gray — body copy           */
+  --text-tertiary:  #8a8a8a;  /* Light gray — meta, captions    */
+  --text-inverse:   #ffffff;  /* For dark backgrounds           */
+  --text-accent:    var(--accent-100);
+
+  /* ── BORDERS — the ONLY depth tool ─────────────────────── */
+  --border-subtle:  rgba(0, 0, 0, 0.06);
+  --border-medium:  rgba(0, 0, 0, 0.10);
+  --border-strong:  rgba(0, 0, 0, 0.18);
+  --border-accent:  var(--accent-border);
+  --border-line:    1px solid var(--border-medium);   /* shorthand */
+
+  /* ── FONTS ──────────────────────────────────────────────── */
+  --font-sans:   var(--font-geist-sans), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:   var(--font-geist-mono), ui-monospace, 'Cascadia Code', monospace;
+
+  /* ── TYPOGRAPHIC SCALE — editorial extremes ─────────────── */
+  --font-xs:       0.6875rem;  /* 11px */
+  --font-sm:       0.8125rem;  /* 13px */
+  --font-base:     0.9375rem;  /* 15px — slightly compact */
+  --font-lg:       1.0625rem;  /* 17px */
+  --font-xl:       1.1875rem;  /* 19px */
+
+  /* Fluid headline scale */
+  --font-caption:  0.8125rem;
+  --font-body:     1rem;
+  --font-h3:       clamp(1.1rem,  2vw,   1.5rem);
+  --font-h2:       clamp(1.75rem, 3.5vw, 2.75rem);
+  --font-h1:       clamp(2.5rem,  5.5vw, 4.5rem);
+  --font-display:  clamp(3.5rem,  8vw,   8rem);   /* Awwwards-scale hero */
+
+  /* Editorial letter-spacing */
+  --tracking-tight:  -0.04em;
+  --tracking-snug:   -0.02em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.06em;
+  --tracking-widest:  0.12em;
+
+  /* ── SPACING ─────────────────────────────────────────────── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  --space-section: clamp(5rem, 12vw, 10rem);
+  --gutter:        clamp(1.25rem, 5vw, 4rem);
+
+  /* ── LAYOUT ──────────────────────────────────────────────── */
+  --max-width:       1280px;
+  --max-width-text:  680px;   /* Optimal reading line-length     */
+  --max-width-prose: 760px;
+
+  /* ── RADII — restrained ──────────────────────────────────── */
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-full: 9999px;
+
+  /* ── TRANSITIONS — 200ms only ────────────────────────────── */
+  /* ── BACKWARD COMPAT aliases ─────────────────────────────── */
+  --accent-gradient: linear-gradient(135deg, var(--accent-100) 0%, var(--accent-200) 100%);
+  --shadow-glow:     none;  /* Intentionally disabled — no glow in minimalist design */
+
+  --ease-standard:  cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast:  150ms;
+  --duration-base:  200ms;
+  --duration-slow:  350ms;
+
+  /* ── ANIMATION REVEAL (CSS-driven) ──────────────────────── */
+  --reveal-distance: 20px;
+}

@@ -1,0 +1,155 @@
+/* ============================================================
+   HERO — Ultra-minimalist editorial layout
+   Awwwards-quality: massive type, negative space, 1px borders
+   ============================================================ */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-root);
+  overflow: hidden;
+  border-bottom: var(--border-line);
+}
+
+/* ── GRID BACKGROUND (static, no animation) ──────────────── */
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CONTENT ─────────────────────────────────────────────── */
+.inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-block: clamp(6rem, 18vh, 12rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+/* ── OVERLINE ─────────────────────────────────────────────── */
+.overline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-100);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ── HEADLINE — the star ─────────────────────────────────── */
+.headline {
+  font-family: var(--font-sans);
+  font-size: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: 0.95;
+  color: var(--text-primary);
+  text-wrap: balance;
+  max-width: 16ch;
+  margin: 0;
+}
+
+/* ── SUBTITLE ─────────────────────────────────────────────── */
+.subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* ── CTA BUTTONS ─────────────────────────────────────────── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* ── DIVIDER ─────────────────────────────────────────────── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-medium);
+  margin-top: var(--space-8);
+}
+
+/* ── METRICS STRIP ───────────────────────────────────────── */
+.metrics {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metricValue {
+  font-family: var(--font-sans);
+  font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metricLabel {
+  font-size: var(--font-caption);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.metricSep {
+  width: 1px;
+  height: 2.5rem;
+  background: var(--border-medium);
+  flex-shrink: 0;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .inner {
+    gap: var(--space-5);
+  }
+
+  .metrics {
+    gap: var(--space-4);
+  }
+
+  .metricSep {
+    display: none;
+  }
+
+  .metric {
+    min-width: 100px;
+  }
+}
