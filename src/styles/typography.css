@@ -99,3 +99,9 @@
   letter-spacing: 0;        /* Arabic does not use letter-spacing */
   word-spacing: 0.05em;
 }
+
+[dir="rtl"] .body {
+  font-family: var(--font-arabic, var(--font-sans));
+  line-height: 1.8;
+  word-spacing: 0.02em;
+}

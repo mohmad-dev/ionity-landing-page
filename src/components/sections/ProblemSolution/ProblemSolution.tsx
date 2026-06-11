@@ -18,7 +18,7 @@ export const ProblemSolution = () => {
           <div className="caption text-accent mb-4 uppercase tracking-widest">{t('overline')}</div>
         </ScrollReveal>
         
-        <TextReveal as="h2" type="words" className="h1 mb-12">
+        <TextReveal as="h2" type="words" className="h2 mb-12">
           {t('title')}
         </TextReveal>
 

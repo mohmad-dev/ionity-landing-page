@@ -60,7 +60,7 @@ export const HowItWorks = () => {
           <div className="caption text-accent mb-4 uppercase tracking-widest">{t('overline')}</div>
         </ScrollReveal>
         
-        <TextReveal as="h2" type="words" className="h1 mb-16">
+        <TextReveal as="h2" type="words" className="h2 mb-16">
           {t('title')}
         </TextReveal>
 

@@ -40,7 +40,7 @@ export const Contact = () => {
                 {t('overline')}
               </div>
             </ScrollReveal>
-            <TextReveal as="h2" type="words" className="h1 mb-6">
+            <TextReveal as="h2" type="words" className="h2 mb-6">
               {t('title')}
             </TextReveal>
             <ScrollReveal delay={0.2}>
