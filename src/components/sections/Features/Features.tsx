@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Section } from '@/components/layout/Section/Section';
 import { StaggerChildren } from '@/components/animations/StaggerChildren';
 import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import styles from './Features.module.css';
@@ -103,26 +102,28 @@ export const Features = () => {
   }));
 
   return (
-    <Section id="features">
-      {/* Section header */}
-      <ScrollReveal className={styles.header}>
-        <p className={`overline ${styles.overlineTag}`}>{t('overline')}</p>
-        <h2 className={styles.sectionTitle}>{t('title')}</h2>
-        <p className={styles.sectionSubtitle}>{t('subtitle')}</p>
-      </ScrollReveal>
+    <section id="features" className={styles.section}>
+      <div className={styles.container}>
+        {/* Section header */}
+        <ScrollReveal className={styles.header}>
+          <p className={`overline ${styles.overlineTag}`}>{t('overline')}</p>
+          <h2 className={styles.sectionTitle}>{t('title')}</h2>
+          <p className={styles.sectionSubtitle}>{t('subtitle')}</p>
+        </ScrollReveal>
 
-      {/* Bento grid */}
-      <StaggerChildren className={styles.grid}>
-        {features.map((feature, idx) => (
-          <FeatureCard
-            key={idx}
-            idx={idx}
-            title={feature.title}
-            description={feature.description}
-          />
-        ))}
-      </StaggerChildren>
-    </Section>
+        {/* Bento grid */}
+        <StaggerChildren className={styles.grid}>
+          {features.map((feature, idx) => (
+            <FeatureCard
+              key={idx}
+              idx={idx}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </StaggerChildren>
+      </div>
+    </section>
   );
 };
 

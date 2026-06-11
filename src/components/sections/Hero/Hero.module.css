@@ -1,6 +1,7 @@
 /* ============================================================
-   HERO — Ultra-minimalist editorial layout
-   Awwwards-quality: massive type, negative space, 1px borders
+   HERO — Apple-style split layout
+   Left: text stack | Right: Spline 3D object
+   Ultra-minimalist: border-first depth, generous negative space
    ============================================================ */
 
 .hero {
@@ -14,21 +15,20 @@
   border-bottom: var(--border-line);
 }
 
-/* ── GRID BACKGROUND (static, no animation) ──────────────── */
+/* ── DOT-GRID BACKGROUND (static, no animation) ────────── */
 .grid {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(var(--border-subtle) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
-  background-size: 80px 80px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+    radial-gradient(circle, var(--border-medium) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 20%, transparent 100%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* ── CONTENT ─────────────────────────────────────────────── */
+/* ── SPLIT CONTAINER ───────────────────────────────────── */
 .inner {
   position: relative;
   z-index: 1;
@@ -36,14 +36,25 @@
   max-width: var(--max-width);
   margin-inline: auto;
   padding-inline: var(--gutter);
-  padding-block: clamp(6rem, 18vh, 12rem);
+  padding-block: clamp(7rem, 16vh, 11rem);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(3rem, 6vw, 6rem);
+}
+
+/* ── LEFT: CONTENT ─────────────────────────────────────── */
+.content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-6);
+  /* GSAP starts hidden */
+  opacity: 0;
 }
 
-/* ── OVERLINE ─────────────────────────────────────────────── */
+/* ── OVERLINE ──────────────────────────────────────────── */
 .overline {
   display: inline-flex;
   align-items: center;
@@ -59,7 +70,7 @@
   flex-shrink: 0;
 }
 
-/* ── HEADLINE — the star ─────────────────────────────────── */
+/* ── HEADLINE ──────────────────────────────────────────── */
 .headline {
   font-family: var(--font-sans);
   font-size: var(--font-display);
@@ -68,20 +79,20 @@
   line-height: 0.95;
   color: var(--text-primary);
   text-wrap: balance;
-  max-width: 16ch;
+  max-width: 14ch;
   margin: 0;
 }
 
-/* ── SUBTITLE ─────────────────────────────────────────────── */
+/* ── SUBTITLE ──────────────────────────────────────────── */
 .subtitle {
-  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
   color: var(--text-secondary);
-  line-height: 1.65;
-  max-width: 52ch;
+  line-height: 1.7;
+  max-width: 46ch;
   margin: 0;
 }
 
-/* ── CTA BUTTONS ─────────────────────────────────────────── */
+/* ── CTAs ──────────────────────────────────────────────── */
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -89,15 +100,15 @@
   margin-top: var(--space-2);
 }
 
-/* ── DIVIDER ─────────────────────────────────────────────── */
+/* ── DIVIDER ───────────────────────────────────────────── */
 .divider {
   width: 100%;
   height: 1px;
   background: var(--border-medium);
-  margin-top: var(--space-8);
+  margin-top: var(--space-6);
 }
 
-/* ── METRICS STRIP ───────────────────────────────────────── */
+/* ── METRICS STRIP ─────────────────────────────────────── */
 .metrics {
   display: flex;
   align-items: center;
@@ -113,7 +124,7 @@
 
 .metricValue {
   font-family: var(--font-sans);
-  font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
   font-weight: 600;
   letter-spacing: var(--tracking-snug);
   color: var(--text-primary);
@@ -130,19 +141,83 @@
 
 .metricSep {
   width: 1px;
-  height: 2.5rem;
+  height: 2.25rem;
   background: var(--border-medium);
   flex-shrink: 0;
 }
 
-/* ── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 768px) {
+/* ── RIGHT: SPLINE VISUAL ──────────────────────────────── */
+.visual {
+  position: relative;
+  /* GSAP starts hidden */
+  opacity: 0;
+}
+
+.splineWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  border: 1px solid var(--border-medium);
+  background: var(--bg-elevated);
+  /* Clip spline canvas to container */
+  isolation: isolate;
+}
+
+/* The Spline iframe/canvas should fill the container */
+.splineWrapper > div,
+.splineWrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.splineFallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-subtle) 100%);
+}
+
+/* Subtle decorative ring — adds premium depth without shadow */
+.visualRing {
+  position: absolute;
+  inset: -12px;
+  border-radius: calc(var(--radius-2xl) + 12px);
+  border: 1px solid var(--border-subtle);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────── */
+@media (max-width: 900px) {
   .inner {
+    grid-template-columns: 1fr;
+    padding-block: clamp(6rem, 14vh, 9rem);
+    gap: var(--space-12);
+  }
+
+  .content {
+    align-items: flex-start;
     gap: var(--space-5);
   }
 
-  .metrics {
-    gap: var(--space-4);
+  .headline {
+    max-width: 100%;
+  }
+
+  .subtitle {
+    max-width: 100%;
+  }
+
+  .visual {
+    order: -1; /* Spline on top on mobile */
+    max-width: 440px;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .splineWrapper {
+    aspect-ratio: 4 / 3;
   }
 
   .metricSep {
@@ -150,6 +225,17 @@
   }
 
   .metric {
-    min-width: 100px;
+    min-width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actions > * {
+    width: 100%;
   }
 }
