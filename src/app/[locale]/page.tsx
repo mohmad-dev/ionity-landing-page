@@ -7,7 +7,6 @@ import { HowItWorks } from '@/components/sections/HowItWorks/HowItWorks';
 import { About } from '@/components/sections/About/About';
 import { Metrics } from '@/components/sections/Metrics/Metrics';
 import { ProductShowcase } from '@/components/sections/ProductShowcase/ProductShowcase';
-import { Pricing } from '@/components/sections/Pricing/Pricing';
 import { Testimonials } from '@/components/sections/Testimonials/Testimonials';
 import { Contact } from '@/components/sections/Contact/Contact';
 import { CTA } from '@/components/sections/CTA/CTA';
@@ -27,7 +26,6 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
       <HowItWorks />
       <Metrics />
       <ProductShowcase />
-      <Pricing />
       <Testimonials />
       <CTA />
       <Contact />
