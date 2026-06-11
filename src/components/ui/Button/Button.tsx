@@ -1,4 +1,7 @@
-import React, { forwardRef, ButtonHTMLAttributes } from 'react';
+'use client';
+
+import React, { forwardRef } from 'react';
+import { playClickSound } from '@/lib/sound';
 import styles from './Button.module.css';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,7 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', isLoading = false, href, children, disabled, ...props }, ref) => {
+  ({ className = '', variant = 'primary', size = 'md', isLoading = false, href, children, disabled, onClick, ...props }, ref) => {
     
     const classes = [
       styles.button,
@@ -21,12 +24,20 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       className
     ].filter(Boolean).join(' ');
 
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement & HTMLAnchorElement>) => {
+      playClickSound();
+      if (onClick) {
+        onClick(e as any);
+      }
+    };
+
     if (href) {
       return (
         <a 
           ref={ref as React.Ref<HTMLAnchorElement>}
           href={href}
           className={classes}
+          onClick={handleClick}
           {...(props as any)}
         >
           <span className={styles.content}>{children}</span>
@@ -39,6 +50,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         ref={ref as React.Ref<HTMLButtonElement>}
         className={classes}
         disabled={disabled || isLoading}
+        onClick={handleClick}
         {...props}
       >
         {isLoading && <span className={styles.spinner} />}

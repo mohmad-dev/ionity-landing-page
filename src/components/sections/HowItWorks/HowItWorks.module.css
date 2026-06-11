@@ -61,7 +61,7 @@
 .dot {
   position: absolute;
   top: 0;
-  left: -var(--space-8);
+  left: calc(-1 * var(--space-8));
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -72,7 +72,7 @@
 
 [dir="rtl"] .dot {
   left: auto;
-  right: -var(--space-8);
+  right: calc(-1 * var(--space-8));
 }
 
 .content {

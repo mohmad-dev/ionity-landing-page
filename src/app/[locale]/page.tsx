@@ -29,8 +29,8 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
       <ProductShowcase />
       <Pricing />
       <Testimonials />
-      <Contact />
       <CTA />
+      <Contact />
       <Footer />
     </main>
   );

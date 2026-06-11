@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { playClickSound } from '@/lib/sound';
 import styles from './Navbar.module.css';
 import { Button } from '@/components/ui/Button/Button';
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher';
@@ -37,31 +38,39 @@ export const Navbar = () => {
     };
   }, [isOpen]);
 
+  const handleLinkClick = () => {
+    playClickSound();
+    setIsOpen(false);
+  };
+
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''} ${isOpen ? styles.headerOpen : ''}`}>
       <div className={styles.container}>
-        <Link href="/" className={styles.logo} aria-label="Ionity Home" onClick={() => setIsOpen(false)}>
+        <Link href="/" className={styles.logo} aria-label="Ionity Home" onClick={handleLinkClick}>
           <IonityLogo size={24} />
           <span className={styles.logoText}>Ionity</span>
         </Link>
 
         <nav className={styles.nav}>
-          <Link href="#features" className={styles.link}>{t('features')}</Link>
-          <Link href="#product" className={styles.link}>{t('product')}</Link>
-          <Link href="#about" className={styles.link}>{t('about')}</Link>
+          <Link href="#features" className={styles.link} onClick={playClickSound}>{t('features')}</Link>
+          <Link href="#product" className={styles.link} onClick={playClickSound}>{t('product')}</Link>
+          <Link href="#about" className={styles.link} onClick={playClickSound}>{t('about')}</Link>
         </nav>
 
         <div className={styles.actions}>
           <div className={styles.desktopActions}>
             <LocaleSwitcher />
-            <Button variant="primary" size="sm" className={styles.cta} href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
+            <Button variant="primary" size="sm" className={styles.cta} href="#contact" onClick={() => setIsOpen(false)}>
               {t('cta')}
             </Button>
           </div>
 
           <button 
             className={`${styles.hamburger} ${isOpen ? styles.hamburgerActive : ''}`}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+              playClickSound();
+              setIsOpen(!isOpen);
+            }}
             aria-label="Toggle menu"
             aria-expanded={isOpen}
           >
@@ -75,13 +84,13 @@ export const Navbar = () => {
       {/* Mobile Full-Screen Menu Overlay */}
       <div className={`${styles.mobileMenu} ${isOpen ? styles.mobileMenuOpen : ''}`}>
         <nav className={styles.mobileNav}>
-          <Link href="#features" className={styles.mobileLink} onClick={() => setIsOpen(false)}>
+          <Link href="#features" className={styles.mobileLink} onClick={handleLinkClick}>
             {t('features')}
           </Link>
-          <Link href="#product" className={styles.mobileLink} onClick={() => setIsOpen(false)}>
+          <Link href="#product" className={styles.mobileLink} onClick={handleLinkClick}>
             {t('product')}
           </Link>
-          <Link href="#about" className={styles.mobileLink} onClick={() => setIsOpen(false)}>
+          <Link href="#about" className={styles.mobileLink} onClick={handleLinkClick}>
             {t('about')}
           </Link>
           
@@ -91,7 +100,7 @@ export const Navbar = () => {
             <div className={styles.mobileSwitcher}>
               <LocaleSwitcher />
             </div>
-            <Button variant="primary" size="lg" className={styles.mobileCta} href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}>
+            <Button variant="primary" size="lg" className={styles.mobileCta} href="#contact" onClick={handleLinkClick}>
               {t('cta')}
             </Button>
           </div>

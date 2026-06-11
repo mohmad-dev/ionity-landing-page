@@ -76,23 +76,16 @@
 }
 
 /* ── BENTO LAYOUT: Asymmetric areas ─────────────────────── */
-/* Card 0 — Large feature: spans 7 cols */
-.card0 { grid-column: span 7; }
-
-/* Card 1 — Medium: spans 5 cols */
-.card1 { grid-column: span 5; }
-
-/* Card 2 — Small: spans 4 cols */
+.card0 { grid-column: span 6; }
+.card1 { grid-column: span 6; }
 .card2 { grid-column: span 4; }
-
-/* Card 3 — Large: spans 8 cols */
-.card3 { grid-column: span 8; }
-
-/* Card 4 — Medium: spans 6 cols */
-.card4 { grid-column: span 6; }
-
-/* Card 5 — Medium: spans 6 cols */
-.card5 { grid-column: span 6; }
+.card3 { grid-column: span 4; }
+.card4 { grid-column: span 4; }
+.card5 { grid-column: span 8; }
+.card6 { grid-column: span 4; }
+.card7 { grid-column: span 4; }
+.card8 { grid-column: span 8; }
+.card9 { grid-column: span 12; }
 
 /* ── ICON ────────────────────────────────────────────────── */
 .cardIcon {
@@ -160,7 +153,11 @@
   .card2,
   .card3,
   .card4,
-  .card5 {
+  .card5,
+  .card6,
+  .card7,
+  .card8,
+  .card9 {
     grid-column: span 6;
   }
 }
@@ -171,7 +168,11 @@
   .card2,
   .card3,
   .card4,
-  .card5 {
+  .card5,
+  .card6,
+  .card7,
+  .card8,
+  .card9 {
     grid-column: span 12;
   }
 

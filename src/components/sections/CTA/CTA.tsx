@@ -21,14 +21,14 @@ export const CTA = () => {
           <div className={styles.actions}>
             <ScrollReveal direction="up" delay={0.4}>
               <MagneticButton>
-                <Button href="https://wa.me/1234567890" variant="primary" size="lg" target="_blank" rel="noopener noreferrer">
+                <Button href="#contact" variant="primary" size="lg">
                   {t('primary')}
                 </Button>
               </MagneticButton>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.5}>
               <MagneticButton strength={10}>
-                <Button href="#" variant="secondary" size="lg">
+                <Button href="https://wa.me/1234567890" variant="secondary" size="lg" target="_blank" rel="noopener noreferrer">
                   {t('secondary')}
                 </Button>
               </MagneticButton>

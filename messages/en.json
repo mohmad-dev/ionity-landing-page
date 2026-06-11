@@ -40,28 +40,44 @@
     "subtitle": "We use the best technologies of 2026 to deliver unmatched speed, reliability, and scale.",
     "items": [
       {
-        "title": "Zero-CLS Architecture",
-        "description": "Sub-second load times with pixel-perfect stability."
+        "title": "Web Application Development",
+        "description": "We design and develop fast, responsive web applications built with modern frameworks."
       },
       {
-        "title": "Global Edge Delivery",
-        "description": "Data served securely from the edge, closer to your users."
+        "title": "Mobile App Development",
+        "description": "Native and cross-platform mobile apps for Android & iOS with fluid user experiences."
       },
       {
-        "title": "Scalable Infrastructure",
-        "description": "Cloud-native architectures built to handle millions of requests."
+        "title": "Enterprise ERP Systems",
+        "description": "Unified business suites managing finance, HR, logistics, and inventory in one place."
       },
       {
-        "title": "Developer Experience",
-        "description": "Built with modern primitives that your engineering team will love."
+        "title": "Hospital Management Systems",
+        "description": "Complete healthcare digital platforms for medical scheduling, patient records, and billing."
       },
       {
-        "title": "Real-time Sync",
-        "description": "Sub-millisecond data synchronization across all clients via WebSockets."
+        "title": "Point of Sale & POS Systems",
+        "description": "Secure, fast cashier software featuring digital invoices, stocks, and sales reporting."
       },
       {
-        "title": "Bank-Grade Security",
-        "description": "End-to-end encryption and strict HIPAA compliance out of the box."
+        "title": "CRM Systems",
+        "description": "Organize your customer communications, support tickets, and sales pipelines efficiently."
+      },
+      {
+        "title": "Cloud Solutions & Hosting",
+        "description": "Architecting secure, distributed cloud hosting infrastructures with 99.99% uptime."
+      },
+      {
+        "title": "Custom Software Development",
+        "description": "Tailor-made software built from scratch to automate your organization's unique business logic."
+      },
+      {
+        "title": "UI/UX Interface Design",
+        "description": "Stunning, human-centered product designs prioritizing usability and visual conversion."
+      },
+      {
+        "title": "API Integration & Development",
+        "description": "Developing secure, highly concurrent API layers to sync databases and external apps."
       }
     ]
   },
@@ -69,22 +85,37 @@
     "overline": "Our Process",
     "title": "From Concept to Scale",
     "steps": [
-      "Discovery & Architecture",
-      "Iterative Engineering",
-      "Deployment & Scaling"
+      "Analysis & Needs",
+      "Planning & Engineering",
+      "UI/UX Design",
+      "Development & Coding",
+      "QA & Testing",
+      "Launch & Support"
     ],
     "step_details": [
       {
-        "title": "1. Architect",
-        "desc": "We map out your data model and system topology using cloud-native paradigms."
+        "title": "1. Analysis & Understanding Needs",
+        "desc": "We study your project requirements precisely and define technical and operational goals."
       },
       {
-        "title": "2. Build",
-        "desc": "Iterative development with zero-downtime continuous integration."
+        "title": "2. Planning & Engineering",
+        "desc": "We design the system architecture and select the right tech stack for maximum speed and stability."
       },
       {
-        "title": "3. Scale",
-        "desc": "Deploy to Edge networks with autoscaling infrastructure."
+        "title": "3. UI/UX Interface Design",
+        "desc": "We design modern, engaging, and easy-to-use interfaces centered around the user experience."
+      },
+      {
+        "title": "4. Development & Coding",
+        "desc": "Our team writes clean, secure, and scalable source code adhering to the highest global standards."
+      },
+      {
+        "title": "5. Quality Assurance & Testing",
+        "desc": "We run rigorous automated and manual tests to ensure system stability and zero bugs."
+      },
+      {
+        "title": "6. Launch & Continuous Support",
+        "desc": "We deploy the project to the live production environment and offer continuous support and maintenance."
       }
     ]
   },
@@ -183,8 +214,8 @@
   },
   "contact": {
     "overline": "Get in touch",
-    "title": "Let's build something exceptional together",
-    "subtitle": "Ready to scale your next digital product? Send us a message and our team will get back to you within 24 hours.",
+    "title": "Order Your Project Now",
+    "subtitle": "Ready to start your next project? Fill out the form below and one of our engineers will get in touch with you within 24 hours to discuss details and provide a free quote.",
     "email": "Email",
     "whatsapp": "WhatsApp",
     "label_name": "Full Name",
