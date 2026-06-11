@@ -1,15 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
-import { Hero } from '@/components/sections/Hero/Hero';
-import { SocialProof } from '@/components/sections/SocialProof/SocialProof';
-import { ProblemSolution } from '@/components/sections/ProblemSolution/ProblemSolution';
-import { Features } from '@/components/sections/Features/Features';
-import { HowItWorks } from '@/components/sections/HowItWorks/HowItWorks';
-import { About } from '@/components/sections/About/About';
-import { Metrics } from '@/components/sections/Metrics/Metrics';
-import { ProductShowcase } from '@/components/sections/ProductShowcase/ProductShowcase';
-import { Testimonials } from '@/components/sections/Testimonials/Testimonials';
+import { ImmersiveSceneLoader } from '@/components/ImmersiveScene/ImmersiveSceneLoader';
 import { Contact } from '@/components/sections/Contact/Contact';
-import { CTA } from '@/components/sections/CTA/CTA';
 import { Footer } from '@/components/sections/Footer/Footer';
 
 export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -18,16 +9,10 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
 
   return (
     <main>
-      <Hero />
-      <SocialProof />
-      <ProblemSolution />
-      <Features />
-      <About />
-      <HowItWorks />
-      <Metrics />
-      <ProductShowcase />
-      <Testimonials />
-      <CTA />
+      {/* Fully immersive 3D scroll experience */}
+      <ImmersiveSceneLoader />
+
+      {/* Contact + Footer outside the immersive scene */}
       <Contact />
       <Footer />
     </main>
