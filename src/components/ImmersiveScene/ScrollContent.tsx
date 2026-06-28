@@ -1,10 +1,10 @@
-'use client';
-
 import React, { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/Button/Button';
 import { MagneticButton } from '@/components/ui/MagneticButton/MagneticButton';
+import RadialOrbitalTimeline from '@/components/ui/radial-orbital-timeline';
+import { useUiSound } from '@/hooks/useUiSound';
 import styles from './ImmersiveScene.module.css';
 
 /* ── Service icons (24px SVG set) ─────────────────────────── */
@@ -23,10 +23,12 @@ const ICONS = [
 
 interface ScrollContentProps {
   scrollContainerRef: React.RefObject<HTMLDivElement | null>;
+  timelineProgress: React.MutableRefObject<number>;
 }
 
-export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
+export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollContentProps) => {
   const t = useTranslations();
+  const playSound = useUiSound();
 
   const services = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => ({
     title: t(`features.items.${i}.title`),
@@ -34,10 +36,91 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
     icon: ICONS[i],
   }));
 
-  const steps = [0, 1, 2, 3, 4, 5].map(i => ({
-    title: t(`howItWorks.step_details.${i}.title`),
-    desc: t(`howItWorks.step_details.${i}.desc`),
-  }));
+  // Tracks cursor position relative to cards for the spotlight border hover effect
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const grid = e.currentTarget;
+    const cards = grid.getElementsByClassName(styles.serviceCard);
+    for (let card of cards as any) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mx', `${x}px`);
+      card.style.setProperty('--my', `${y}px`);
+    }
+  };
+
+  const renderMicroUI = (index: number) => {
+    switch (index) {
+      case 0: // ERP System
+        return (
+          <div className={styles.microUI} aria-hidden="true">
+            <div className={styles.pipeline}>
+              <span className={`${styles.pipeDot} ${styles.active}`} />
+              <div className={styles.pipeLine} />
+              <span className={`${styles.pipeDot} ${styles.active}`} />
+              <div className={styles.pipeLine} />
+              <span className={`${styles.pipeDot} ${styles.pulse}`} />
+            </div>
+          </div>
+        );
+      case 1: // CRM System
+        return (
+          <div className={styles.microUI} aria-hidden="true">
+            <div className={styles.radialRing}>
+              <div className={styles.radialDot} />
+              <span className="text-[9px] font-mono opacity-40">SYNCING</span>
+            </div>
+          </div>
+        );
+      case 2: // Databases / Storage
+        return (
+          <div className={styles.microUI} aria-hidden="true">
+            <div className={styles.serverRack}>
+              <div className={styles.serverRow}>
+                <span className={styles.ledGreen} />
+                <span className="font-mono text-[9px] opacity-40">NODE-A</span>
+                <span className="font-mono text-[9px] text-emerald-400">OK</span>
+              </div>
+              <div className={styles.serverRow}>
+                <span className={styles.ledGreen} />
+                <span className="font-mono text-[9px] opacity-40">NODE-B</span>
+                <span className="font-mono text-[9px] text-emerald-400">OK</span>
+              </div>
+            </div>
+          </div>
+        );
+      case 3: // Custom Code Terminal
+        return (
+          <div className={styles.microUI} aria-hidden="true">
+            <div className={styles.terminal}>
+              <span className="text-emerald-400 font-mono text-[10px]">$</span>
+              <span className="font-mono text-[9px] ml-1 text-zinc-300">deploy --success</span>
+              <span className={styles.cursor} />
+            </div>
+          </div>
+        );
+      case 4: // UI/UX Blueprint grid
+        return (
+          <div className={styles.microUI} aria-hidden="true">
+            <div className={styles.blueprint}>
+              <div className={styles.blueprintGrid} />
+              <div className={styles.crosshair} />
+            </div>
+          </div>
+        );
+      case 5: // Security shield scan
+        return (
+          <div className={styles.microUI} aria-hidden="true">
+            <div className={styles.scanner}>
+              <div className={styles.scannerLine} />
+              <span className="font-mono text-[9px] text-emerald-400 tracking-wider">PROTECTED</span>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={styles.scrollContent} ref={scrollContainerRef}>
@@ -47,7 +130,7 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
           Full viewport, centered text on left half
       ════════════════════════════════════════════════════ */}
       <section className={`${styles.section} ${styles.sectionHero}`} id="hero">
-        <div className={styles.heroContent} data-reveal>
+        <div className={styles.heroContent} data-reveal="hero">
           <div className={styles.overline}>
             <span className={styles.dot} />
             <span className={styles.overlineText}>{t('hero.overline')}</span>
@@ -62,12 +145,13 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
                 size="lg"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={playSound}
               >
                 {t('hero.cta_primary')}
               </Button>
             </MagneticButton>
             <MagneticButton strength={10}>
-              <Button href="#services" variant="secondary" size="lg">
+              <Button href="#services" variant="secondary" size="lg" onClick={playSound}>
                 {t('hero.cta_secondary')}
               </Button>
             </MagneticButton>
@@ -101,8 +185,9 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
 
       {/* ════════════════════════════════════════════════════
           SECTION 2 — SERVICES
+          Enforcing py-32 (128px / 8rem padding block)
       ════════════════════════════════════════════════════ */}
-      <section className={`${styles.section} ${styles.sectionServices}`} id="services">
+      <section className={`${styles.section} ${styles.sectionServices} py-32`} id="services">
         <div className={styles.sectionInner}>
           <div className={styles.sectionHeader} data-reveal>
             <p className={styles.sectionOverline}>{t('features.overline')}</p>
@@ -110,12 +195,14 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
             <p className={styles.sectionSubtitle}>{t('features.subtitle')}</p>
           </div>
 
-          <div className={styles.servicesGrid} data-reveal="stagger">
+          <div className={styles.servicesGrid} data-reveal="stagger" onMouseMove={handleMouseMove}>
             {services.map((s, i) => (
               <article key={i} className={styles.serviceCard}>
+                <span className={styles.cardNumber}>0{i + 1}</span>
                 <div className={styles.serviceIcon}>{s.icon}</div>
                 <h3 className={styles.serviceTitle}>{s.title}</h3>
                 <p className={styles.serviceDesc}>{s.description}</p>
+                {renderMicroUI(i)}
               </article>
             ))}
           </div>
@@ -123,34 +210,20 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          SECTION 3 — HOW IT WORKS
+          SECTION 3 — PROCESS (RADIAL ORBITAL TIMELINE)
+          Scrub-based interactive section
       ════════════════════════════════════════════════════ */}
-      <section className={`${styles.section} ${styles.sectionProcess}`} id="process">
-        <div className={styles.sectionInner}>
-          <div className={styles.sectionHeader} data-reveal>
-            <p className={styles.sectionOverline}>{t('howItWorks.overline')}</p>
-            <h2 className={styles.sectionTitle}>{t('howItWorks.title')}</h2>
-          </div>
-
-          <div className={styles.processTimeline}>
-            {steps.map((step, i) => (
-              <div key={i} className={styles.processStep} data-reveal>
-                <div className={styles.stepNumber}>0{i + 1}</div>
-                <div className={styles.stepConnector} />
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>{step.title}</h3>
-                  <p className={styles.stepDesc}>{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      <section className={`${styles.section} ${styles.sectionProcess} py-32`} id="process">
+        <div className="w-full">
+          <RadialOrbitalTimeline timelineProgress={timelineProgress} />
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════════
           SECTION 4 — METRICS (BIG NUMBERS)
+          Enforcing py-32 (128px / 8rem padding block)
       ════════════════════════════════════════════════════ */}
-      <section className={`${styles.section} ${styles.sectionMetrics}`} id="metrics">
+      <section className={`${styles.section} ${styles.sectionMetrics} py-32`} id="metrics">
         <div className={styles.sectionInner}>
           <div className={styles.sectionHeader} data-reveal>
             <p className={styles.sectionOverline}>{t('metrics.overline')}</p>
@@ -175,8 +248,9 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
 
       {/* ════════════════════════════════════════════════════
           SECTION 5 — CTA
+          Enforcing py-32 (128px / 8rem padding block)
       ════════════════════════════════════════════════════ */}
-      <section className={`${styles.section} ${styles.sectionCTA}`} id="cta">
+      <section className={`${styles.section} ${styles.sectionCTA} py-32`} id="cta">
         <div className={styles.ctaInner} data-reveal>
           <p className={styles.sectionOverline}>{t('hero.overline')}</p>
           <h2 className={styles.ctaTitle}>{t('cta.title')}</h2>
@@ -187,6 +261,7 @@ export const ScrollContent = ({ scrollContainerRef }: ScrollContentProps) => {
                 href="#contact"
                 variant="primary"
                 size="lg"
+                onClick={playSound}
               >
                 {t('cta.primary')}
               </Button>

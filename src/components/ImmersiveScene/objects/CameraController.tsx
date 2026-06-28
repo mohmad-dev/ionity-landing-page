@@ -6,6 +6,7 @@ import * as THREE from 'three';
 
 interface CameraControllerProps {
   scrollProgress: React.MutableRefObject<number>;
+  timelineProgress: React.MutableRefObject<number>;
 }
 
 // Camera path keyframes — [scroll_t, x, y, z]
@@ -43,18 +44,53 @@ function samplePath(s: number) {
 const _target = new THREE.Vector3();
 const _current = new THREE.Vector3();
 
-export const CameraController = ({ scrollProgress }: CameraControllerProps) => {
+export const CameraController = ({ scrollProgress, timelineProgress }: CameraControllerProps) => {
   const { camera } = useThree();
 
   useFrame((_, delta) => {
     const s = scrollProgress.current;
-    const pt = samplePath(s);
-    _target.set(pt.x, pt.y, pt.z);
-    // Smooth follow — lerp camera toward target
-    _current.copy(camera.position);
-    camera.position.lerp(_target, delta * 3.5);
+    const tp = timelineProgress?.current ?? 0;
+
+    if (tp > 0) {
+      if (tp < 0.20) {
+        // Transition camera from Services position to Timeline position
+        const p_cam = tp / 0.20;
+        const x = THREE.MathUtils.lerp(-1.2, 0.0, p_cam);
+        const y = THREE.MathUtils.lerp(0.8, 0.0, p_cam);
+        const z = THREE.MathUtils.lerp(5.8, 6.5, p_cam);
+        _target.set(x, y, z);
+      } else if (tp <= 0.80) {
+        // Timeline active: Camera is stationary at the center
+        _target.set(0.0, 0.0, 6.5);
+      } else {
+        // Zoom-in phase: Camera zooms forward slightly to enhance depth
+        const p_zoom = (tp - 0.80) / 0.20;
+        const x = THREE.MathUtils.lerp(0.0, 0.0, p_zoom);
+        const y = THREE.MathUtils.lerp(0.0, 0.0, p_zoom);
+        const z = THREE.MathUtils.lerp(6.5, 5.0, p_zoom);
+        _target.set(x, y, z);
+      }
+    } else {
+      const pt = samplePath(s);
+      _target.set(pt.x, pt.y, pt.z);
+    }
+
+    // Smooth follow — lerp camera toward target with clamped delta to prevent explosion
+    const alpha = Math.min(1.0, delta * 3.5);
+    camera.position.lerp(_target, alpha);
     // Always look at origin
     camera.lookAt(0, 0, 0);
+
+    if (typeof window !== 'undefined') {
+      (window as any).debugCamera = {
+        x: camera.position.x,
+        y: camera.position.y,
+        z: camera.position.z,
+        targetX: _target.x,
+        targetY: _target.y,
+        targetZ: _target.z,
+      };
+    }
   });
 
   return null;

@@ -10,12 +10,72 @@
 }
 
 .scrolled {
-  background: var(--bg-glass);
+  background: rgba(14, 14, 17, 0.75) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   padding-block: var(--space-3);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.scrolled .logoText {
+  color: #ffffff !important;
+}
+
+.scrolled [class*="logoO"] {
+  stroke: #ffffff !important;
+  transition: stroke 0.3s ease;
+}
+
+.scrolled a:hover [class*="logoO"] {
+  stroke: var(--accent-100) !important;
+}
+
+.scrolled .link {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.scrolled .link:hover {
+  color: #ffffff !important;
+}
+
+.scrolled .hamburgerBar {
+  background-color: #ffffff !important;
+}
+
+/* Locale Switcher inside scrolled navbar */
+.scrolled button {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s ease;
+}
+
+.scrolled button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--accent-100) !important;
+  border-color: var(--accent-100) !important;
+}
+
+/* Revert to dark text when mobile menu is open even if scrolled */
+.headerOpen .logoText {
+  color: #1d1d1f !important;
+}
+
+.headerOpen [class*="logoO"] {
+  stroke: #1d1d1f !important;
+}
+
+.headerOpen .hamburgerBar {
+  background-color: #1d1d1f !important;
+}
+
+.headerOpen button {
+  color: #1d1d1f !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.headerOpen button:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
 }
 
 .container {
@@ -248,4 +308,40 @@
   width: 100%;
   display: inline-flex !important;
   justify-content: center;
+}
+
+/* ── LIGHT MODE OVERRIDES FOR HERO HEADER (NOT SCROLLED) ── */
+.header:not(.scrolled) .logoText {
+  color: #1d1d1f;
+  transition: color 0.3s ease;
+}
+
+.header:not(.scrolled) .logo svg circle {
+  stroke: #1d1d1f !important;
+  transition: stroke 0.3s ease;
+}
+
+.header:not(.scrolled) .link {
+  color: #515154;
+  transition: color 0.3s ease;
+}
+
+.header:not(.scrolled) .link:hover {
+  color: #1d1d1f;
+}
+
+.header:not(.scrolled) .hamburgerBar {
+  background-color: #1d1d1f;
+  transition: background-color 0.3s ease;
+}
+
+/* Locale Switcher inside navbar override */
+.header:not(.scrolled) button {
+  color: #1d1d1f !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.3s ease;
+}
+
+.header:not(.scrolled) button:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
 }

@@ -7,6 +7,7 @@ import { ScrollReveal } from '@/components/animations/ScrollReveal';
 import { TextReveal } from '@/components/animations/TextReveal';
 import { Button } from '@/components/ui/Button/Button';
 import { MagneticButton } from '@/components/ui/MagneticButton/MagneticButton';
+import { playClickSound } from '@/lib/sound';
 import styles from './Contact.module.css';
 
 export const Contact = () => {
@@ -142,7 +143,7 @@ export const Contact = () => {
                   </div>
 
                   <MagneticButton strength={4}>
-                    <button type="submit" className={styles.submitBtn}>
+                    <button type="submit" className={styles.submitBtn} onClick={playClickSound}>
                       {t('submit')}
                     </button>
                   </MagneticButton>

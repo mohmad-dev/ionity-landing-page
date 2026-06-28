@@ -10,7 +10,7 @@ const ImmersiveSceneInner = dynamic(
     loading: () => (
       <div style={{
         minHeight: '100vh',
-        background: '#080808',
+        background: '#0e0e11',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

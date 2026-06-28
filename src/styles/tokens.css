@@ -6,12 +6,12 @@
 
 :root {
   /* ── BACKGROUNDS ────────────────────────────────────────── */
-  --bg-root:      #f7f7f5;   /* Warm off-white — editorial paper */
+  --bg-root:      #f5f5f7;   /* Softer Apple off-white           */
   --bg-primary:   #ffffff;   /* Pure white — card surfaces       */
   --bg-elevated:  #f2f2f0;   /* Slightly sunken — code blocks    */
   --bg-subtle:    #ebebea;   /* Hover states, subtle fills       */
-  --bg-inverse:   #0a0a0a;   /* Used for CTA sections            */
-  --bg-glass:     rgba(247, 247, 245, 0.85); /* Semi-transparent warm glass */
+  --bg-inverse:   #0e0e11;   /* Midnight charcoal for contrast   */
+  --bg-glass:     rgba(245, 245, 247, 0.85); /* Semi-transparent off-white glass */
 
   /* ── ACCENT — used sparingly ────────────────────────────── */
   --accent-100:   #00a868;   /* Primary brand green — buttons only */
@@ -20,9 +20,9 @@
   --accent-border: rgba(0, 168, 104, 0.2);
 
   /* ── TYPOGRAPHY ─────────────────────────────────────────── */
-  --text-primary:   #0a0a0a;  /* Near-black — maximum authority */
-  --text-secondary: #525252;  /* Mid-gray — body copy           */
-  --text-tertiary:  #8a8a8a;  /* Light gray — meta, captions    */
+  --text-primary:   #1c1c1e;  /* Soft dark charcoal               */
+  --text-secondary: #6e6e73;  /* Soft mid-gray body copy          */
+  --text-tertiary:  #86868b;  /* Apple caption/meta gray          */
   --text-inverse:   #ffffff;  /* For dark backgrounds           */
   --text-accent:    var(--accent-100);
 

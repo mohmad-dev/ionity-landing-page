@@ -84,6 +84,9 @@
   "howItWorks": {
     "overline": "Our Process",
     "title": "From Concept to Scale",
+    "status_completed": "Complete",
+    "status_in_progress": "In Progress",
+    "status_pending": "Pending",
     "steps": [
       "Analysis & Needs",
       "Planning & Engineering",

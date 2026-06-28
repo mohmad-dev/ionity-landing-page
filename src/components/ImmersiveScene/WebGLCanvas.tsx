@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { FloatingIcosahedron } from './objects/FloatingIcosahedron';
+import { ParticleLogo } from './objects/ParticleLogo';
 import { ParticleField } from './objects/ParticleField';
 import { SceneBackground } from './objects/SceneBackground';
 import { CameraController } from './objects/CameraController';
@@ -10,9 +10,10 @@ import styles from './ImmersiveScene.module.css';
 
 interface WebGLCanvasProps {
   scrollProgress: React.MutableRefObject<number>;
+  timelineProgress: React.MutableRefObject<number>;
 }
 
-export const WebGLCanvas = ({ scrollProgress }: WebGLCanvasProps) => {
+export const WebGLCanvas = ({ scrollProgress, timelineProgress }: WebGLCanvasProps) => {
   return (
     <div className={styles.canvasWrap} aria-hidden="true">
       <Canvas
@@ -28,7 +29,7 @@ export const WebGLCanvas = ({ scrollProgress }: WebGLCanvasProps) => {
         <SceneBackground scrollProgress={scrollProgress} />
 
         {/* Camera driven by scroll */}
-        <CameraController scrollProgress={scrollProgress} />
+        <CameraController scrollProgress={scrollProgress} timelineProgress={timelineProgress} />
 
         {/* Lighting */}
         <ambientLight intensity={0.3} />
@@ -37,7 +38,7 @@ export const WebGLCanvas = ({ scrollProgress }: WebGLCanvasProps) => {
         <pointLight position={[0, -5, 3]} intensity={0.3} color="#00a868" />
 
         {/* 3D Objects */}
-        <FloatingIcosahedron scrollProgress={scrollProgress} />
+        <ParticleLogo scrollProgress={scrollProgress} timelineProgress={timelineProgress} />
         <ParticleField scrollProgress={scrollProgress} />
       </Canvas>
     </div>
