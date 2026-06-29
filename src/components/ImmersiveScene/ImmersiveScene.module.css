@@ -118,17 +118,19 @@
   font-weight: 700;
   letter-spacing: var(--tracking-tight);
   line-height: 0.93;
-  color: #1d1d1f;
+  color: var(--scene-text-primary, #1d1d1f);
   text-wrap: balance;
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 .heroSubtitle {
   font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
-  color: #515154;
+  color: var(--scene-text-secondary, #515154);
   line-height: 1.7;
   max-width: 44ch;
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 /* CTA buttons */
@@ -161,23 +163,27 @@
   font-size: clamp(1.25rem, 2.2vw, 1.75rem);
   font-weight: 700;
   letter-spacing: var(--tracking-tight);
-  color: #1d1d1f;
+  color: var(--scene-text-primary, #1d1d1f);
   line-height: 1;
+  transition: color 0.3s ease;
 }
 
 .metricLbl {
   font-size: var(--font-caption);
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--scene-text-secondary, rgba(0,0,0,0.5));
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .metricDivider {
   width: 1px;
   height: 2.25rem;
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--scene-text-secondary, rgba(0,0,0,0.1));
   flex-shrink: 0;
+  opacity: 0.3;
+  transition: background 0.3s ease;
 }
 
 /* Scroll hint */
@@ -294,18 +300,22 @@
 }
 
 .serviceCard {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  /* Premium Dark Floating Glass */
+  background: rgba(8, 8, 20, 0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-xl);
   padding: var(--space-8);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Tilt uses JS transform — only transition border/shadow */
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
   position: relative;
   overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .cardNumber {
@@ -327,14 +337,15 @@
 }
 
 .serviceCard:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(0, 255, 178, 0.3);
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 255, 178, 0.05);
+  border-color: rgba(0, 255, 178, 0.18);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 255, 178, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .serviceCard:hover .cardNumber {
-  color: rgba(0, 255, 178, 0.09);
+  color: rgba(0, 255, 178, 0.12);
 }
 
 .serviceCard:hover .serviceIcon {
@@ -372,24 +383,45 @@
   margin-bottom: var(--space-4);
 }
 
-/* Spotlight hover effect following the cursor coordinates */
+/* ── Cursor spotlight ── */
 .serviceCard::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-    250px circle at var(--mx, 0px) var(--my, 0px),
-    rgba(0, 255, 178, 0.04),
-    transparent 80%
+    280px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 255, 178, 0.055),
+    transparent 70%
   );
   opacity: 0;
-  transition: opacity 0.5s var(--ease-standard);
+  transition: opacity 0.4s ease;
   pointer-events: none;
   z-index: 1;
 }
 
 .serviceCard:hover::after {
+  opacity: 1;
+}
+
+/* ── Tilt glare overlay — driven by --gx/--gy from JS ── */
+.serviceCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 60% 40% at var(--gx, 50%) var(--gy, 50%),
+    rgba(255, 255, 255, 0.04),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.serviceCard:hover::before {
   opacity: 1;
 }
 

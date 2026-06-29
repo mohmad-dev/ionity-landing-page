@@ -19,13 +19,12 @@ const WebGLCanvas = dynamic(
   { ssr: false }
 );
 
-// Detect low-power devices (mobile / reduced motion preference)
+// Detect low-power devices
 function useLowPowerMode() {
   const [lowPower, setLowPower] = useState(false);
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    // Also check for GPU limits via canvas
     setLowPower(reducedMotion || (isMobile && window.innerWidth < 768));
   }, []);
   return lowPower;
@@ -33,15 +32,98 @@ function useLowPowerMode() {
 
 export const ImmersiveScene = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const scrollProgress = useRef(0);        // [0..1] normalized scroll
-  const timelineProgress = useRef(0);      // Local timeline pinning progress
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollProgress = useRef(0);
+  const timelineProgress = useRef(0);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const lowPower = useLowPowerMode();
+  const entryDone = useRef(false);
 
-  // ── Global GSAP ScrollTrigger Entrance Animations ───────────
+  // ── CINEMATIC ENTRY TIMELINE ───────────────────────────────
+  useEffect(() => {
+    if (lowPower || entryDone.current || typeof window === 'undefined') return;
+    entryDone.current = true;
+
+    // Lock scroll during entry
+    document.body.style.overflow = 'hidden';
+
+    // Create master timeline
+    const tl = gsap.timeline({
+      onComplete: () => {
+        document.body.style.overflow = '';
+      },
+    });
+
+    // Phase 0: Start everything invisible
+    gsap.set('[data-entry]', { opacity: 0, y: 48 });
+    gsap.set('[data-entry-canvas]', { opacity: 0 });
+    gsap.set('[data-entry-overline]', { opacity: 0, y: 20, letterSpacing: '0.4em' });
+    gsap.set('[data-entry-headline]', { opacity: 0, y: 60, skewY: 2 });
+    gsap.set('[data-entry-sub]', { opacity: 0, y: 30 });
+    gsap.set('[data-entry-actions]', { opacity: 0, y: 20 });
+    gsap.set('[data-entry-metrics]', { opacity: 0, y: 16 });
+    gsap.set('[data-entry-scroll]', { opacity: 0 });
+
+    // Phase 1 (0s → 0.6s): WebGL Canvas fades in
+    tl.to('[data-entry-canvas]', {
+      opacity: 1,
+      duration: 0.9,
+      ease: 'power2.inOut',
+    }, 0.1);
+
+    // Phase 2 (0.4s → 0.8s): Overline badge snaps in with letter-spacing collapse
+    tl.to('[data-entry-overline]', {
+      opacity: 1,
+      y: 0,
+      letterSpacing: '0.14em',
+      duration: 0.7,
+      ease: 'expo.out',
+    }, 0.5);
+
+    // Phase 3 (0.7s → 1.2s): Headline sweeps up with skew correction
+    tl.to('[data-entry-headline]', {
+      opacity: 1,
+      y: 0,
+      skewY: 0,
+      duration: 0.85,
+      ease: 'expo.out',
+    }, 0.75);
+
+    // Phase 4 (1.0s): Subtitle & actions stagger in
+    tl.to('[data-entry-sub]', {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+    }, 1.05);
+
+    tl.to('[data-entry-actions]', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power3.out',
+    }, 1.25);
+
+    // Phase 5 (1.4s): Metrics bar slides in
+    tl.to('[data-entry-metrics]', {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+    }, 1.45);
+
+    // Phase 6 (1.7s): Scroll hint fades
+    tl.to('[data-entry-scroll]', {
+      opacity: 0.4,
+      duration: 0.8,
+      ease: 'power1.inOut',
+    }, 1.7);
+
+    return () => { tl.kill(); };
+  }, [lowPower]);
+
+  // ── ScrollTrigger reveals for non-hero sections ────────────
   useGSAP(() => {
     if (lowPower) {
-      // Fallback for low-power mode: standard IntersectionObserver
       const els = document.querySelectorAll('[data-reveal]');
       const obs = new IntersectionObserver(
         (entries) => {
@@ -58,45 +140,24 @@ export const ImmersiveScene = () => {
       return () => obs.disconnect();
     }
 
-    // Normal mode: GSAP reveals
-    // 1. Hero immediate reveal (no delay/scroll requirement to prevent white screen text delay)
-    const heroEl = document.querySelector('[data-reveal="hero"]');
-    if (heroEl) {
-      gsap.set(heroEl, { transition: 'none' });
-      gsap.fromTo(heroEl,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.0,
-          ease: 'power3.out',
-          delay: 0.15
-        }
-      );
-    }
-
-    // 2. ScrollTrigger reveals for the rest of the sections
     const otherEls = document.querySelectorAll('[data-reveal]:not([data-reveal="hero"])');
     otherEls.forEach(el => {
       const isStagger = el.getAttribute('data-reveal') === 'stagger';
       const targets = isStagger ? Array.from(el.children) : [el];
 
-      // Disable CSS transitions so GSAP can animate cleanly
       gsap.set(targets, { transition: 'none' });
-
-      // If it is a stagger layout, show the parent container itself (so it is not hidden by [data-reveal])
       if (isStagger) {
         gsap.set(el, { opacity: 1, y: 0, translate: '0 0' });
       }
 
-      gsap.fromTo(targets, 
-        { opacity: 0, y: 30 },
+      gsap.fromTo(targets,
+        { opacity: 0, y: 36 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
-          stagger: isStagger ? 0.08 : 0,
-          ease: 'power2.out',
+          duration: 0.85,
+          stagger: isStagger ? 0.07 : 0,
+          ease: 'expo.out',
           scrollTrigger: {
             trigger: el,
             start: 'top 88%',
@@ -107,36 +168,31 @@ export const ImmersiveScene = () => {
     });
   }, { scope: wrapperRef, dependencies: [lowPower] });
 
-  // ── Lenis smooth scroll + scroll progress tracker ────────────
+  // ── Lenis smooth scroll ────────────────────────────────────
   useEffect(() => {
     if (lowPower) return;
 
     const lenis = new Lenis({
-      duration: 1.3,
+      duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
 
-    // Track normalized scroll progress
     lenis.on('scroll', ({ progress }: { progress: number }) => {
       scrollProgress.current = progress;
-      
-      // Notify ScrollTrigger about scroll updates
       if (typeof window !== 'undefined') {
         const { ScrollTrigger } = require('gsap/ScrollTrigger');
         ScrollTrigger.update();
       }
     });
 
-    // Refresh ScrollTrigger positions after page fully renders
     const refreshTimer = setTimeout(() => {
       if (typeof window !== 'undefined') {
         const { ScrollTrigger } = require('gsap/ScrollTrigger');
         ScrollTrigger.refresh();
       }
-    }, 600);
+    }, 500);
 
-    // Animation loop
     let raf: number;
     function raf_fn(time: number) {
       lenis.raf(time);
@@ -153,13 +209,17 @@ export const ImmersiveScene = () => {
 
   return (
     <div className={styles.wrapper} ref={wrapperRef}>
-      {/* Fixed 3D Canvas — behind everything */}
-      {!lowPower && <WebGLCanvas scrollProgress={scrollProgress} timelineProgress={timelineProgress} />}
+      {/* Fixed 3D Canvas */}
+      {!lowPower && (
+        <div data-entry-canvas>
+          <WebGLCanvas scrollProgress={scrollProgress} timelineProgress={timelineProgress} />
+        </div>
+      )}
 
-      {/* If low power, just a solid dark background */}
+      {/* Fallback for low-power devices */}
       {lowPower && <div className={styles.fallbackBg} />}
 
-      {/* HTML content scrolls on top */}
+      {/* HTML content */}
       <ScrollContent scrollContainerRef={scrollContainerRef} timelineProgress={timelineProgress} />
     </div>
   );

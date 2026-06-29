@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Button } from '@/components/ui/Button/Button';
@@ -7,7 +7,7 @@ import RadialOrbitalTimeline from '@/components/ui/radial-orbital-timeline';
 import { useUiSound } from '@/hooks/useUiSound';
 import styles from './ImmersiveScene.module.css';
 
-/* ── Service icons (24px SVG set) ─────────────────────────── */
+/* ── Service icons ──────────────────────────────────────────── */
 const ICONS = [
   <svg key={0} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
   <svg key={1} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>,
@@ -26,6 +26,100 @@ interface ScrollContentProps {
   timelineProgress: React.MutableRefObject<number>;
 }
 
+/* ── 3D Tilt physics on service cards ──────────────────────── */
+const useTilt = () => {
+  const cardRef = useRef<HTMLElement>(null);
+  const raf = useRef<number>(0);
+  const current = useRef({ rx: 0, ry: 0, gx: 50, gy: 50 });
+  const target  = useRef({ rx: 0, ry: 0, gx: 50, gy: 50 });
+
+  const onMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const xRel = (e.clientX - rect.left) / rect.width;
+    const yRel = (e.clientY - rect.top)  / rect.height;
+    target.current.rx = (yRel - 0.5) * -14;   // pitch
+    target.current.ry = (xRel - 0.5) *  14;   // yaw
+    target.current.gx = xRel * 100;
+    target.current.gy = yRel * 100;
+
+    // Also update spotlight CSS vars
+    el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    el.style.setProperty('--my', `${e.clientY - rect.top}px`);
+  }, []);
+
+  const animate = useCallback(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const c = current.current;
+    const t = target.current;
+    // Exponential lerp for spring-like feel
+    c.rx += (t.rx - c.rx) * 0.12;
+    c.ry += (t.ry - c.ry) * 0.12;
+    c.gx += (t.gx - c.gx) * 0.12;
+    c.gy += (t.gy - c.gy) * 0.12;
+    el.style.transform = `perspective(900px) rotateX(${c.rx}deg) rotateY(${c.ry}deg) translateZ(4px)`;
+    el.style.setProperty('--gx', `${c.gx}%`);
+    el.style.setProperty('--gy', `${c.gy}%`);
+    raf.current = requestAnimationFrame(animate);
+  }, []);
+
+  const onMouseEnter = useCallback(() => {
+    cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(animate);
+  }, [animate]);
+
+  const onMouseLeave = useCallback(() => {
+    target.current = { rx: 0, ry: 0, gx: 50, gy: 50 };
+    // Let spring settle
+    const settle = () => {
+      const el = cardRef.current;
+      if (!el) return;
+      const c = current.current;
+      const t = target.current;
+      c.rx += (t.rx - c.rx) * 0.08;
+      c.ry += (t.ry - c.ry) * 0.08;
+      if (Math.abs(c.rx) > 0.05 || Math.abs(c.ry) > 0.05) {
+        el.style.transform = `perspective(900px) rotateX(${c.rx}deg) rotateY(${c.ry}deg)`;
+        raf.current = requestAnimationFrame(settle);
+      } else {
+        el.style.transform = '';
+        cancelAnimationFrame(raf.current);
+      }
+    };
+    cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(settle);
+  }, []);
+
+  return { cardRef, onMouseMove, onMouseEnter, onMouseLeave };
+};
+
+/* ── Individual tiltable card ───────────────────────────────── */
+const ServiceCard = ({ service, index, renderMicroUI }: {
+  service: { title: string; description: string; icon: React.ReactNode };
+  index: number;
+  renderMicroUI: (i: number) => React.ReactNode;
+}) => {
+  const { cardRef, onMouseMove, onMouseEnter, onMouseLeave } = useTilt();
+
+  return (
+    <article
+      ref={cardRef as React.RefObject<HTMLElement>}
+      className={styles.serviceCard}
+      onMouseMove={onMouseMove as any}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <span className={styles.cardNumber}>0{index + 1}</span>
+      <div className={styles.serviceIcon}>{service.icon}</div>
+      <h3 className={styles.serviceTitle}>{service.title}</h3>
+      <p className={styles.serviceDesc}>{service.description}</p>
+      {renderMicroUI(index)}
+    </article>
+  );
+};
+
 export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollContentProps) => {
   const t = useTranslations();
   const playSound = useUiSound();
@@ -36,22 +130,9 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
     icon: ICONS[i],
   }));
 
-  // Tracks cursor position relative to cards for the spotlight border hover effect
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const grid = e.currentTarget;
-    const cards = grid.getElementsByClassName(styles.serviceCard);
-    for (let card of cards as any) {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mx', `${x}px`);
-      card.style.setProperty('--my', `${y}px`);
-    }
-  };
-
   const renderMicroUI = (index: number) => {
     switch (index) {
-      case 0: // ERP System
+      case 0:
         return (
           <div className={styles.microUI} aria-hidden="true">
             <div className={styles.pipeline}>
@@ -63,7 +144,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             </div>
           </div>
         );
-      case 1: // CRM System
+      case 1:
         return (
           <div className={styles.microUI} aria-hidden="true">
             <div className={styles.radialRing}>
@@ -72,7 +153,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             </div>
           </div>
         );
-      case 2: // Databases / Storage
+      case 2:
         return (
           <div className={styles.microUI} aria-hidden="true">
             <div className={styles.serverRack}>
@@ -89,7 +170,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             </div>
           </div>
         );
-      case 3: // Custom Code Terminal
+      case 3:
         return (
           <div className={styles.microUI} aria-hidden="true">
             <div className={styles.terminal}>
@@ -99,7 +180,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             </div>
           </div>
         );
-      case 4: // UI/UX Blueprint grid
+      case 4:
         return (
           <div className={styles.microUI} aria-hidden="true">
             <div className={styles.blueprint}>
@@ -108,7 +189,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             </div>
           </div>
         );
-      case 5: // Security shield scan
+      case 5:
         return (
           <div className={styles.microUI} aria-hidden="true">
             <div className={styles.scanner}>
@@ -127,17 +208,27 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
 
       {/* ════════════════════════════════════════════════════
           SECTION 1 — HERO
-          Full viewport, centered text on left half
       ════════════════════════════════════════════════════ */}
       <section className={`${styles.section} ${styles.sectionHero}`} id="hero">
-        <div className={styles.heroContent} data-reveal="hero">
-          <div className={styles.overline}>
+        <div className={styles.heroContent}>
+          {/* Overline — letter-spacing animates in entry */}
+          <div className={styles.overline} data-entry-overline>
             <span className={styles.dot} />
             <span className={styles.overlineText}>{t('hero.overline')}</span>
           </div>
-          <h1 className={styles.heroHeadline}>{t('hero.title')}</h1>
-          <p className={styles.heroSubtitle}>{t('hero.subtitle')}</p>
-          <div className={styles.heroActions}>
+
+          {/* Headline — skew + slide up */}
+          <h1 className={styles.heroHeadline} data-entry-headline>
+            {t('hero.title')}
+          </h1>
+
+          {/* Subtitle */}
+          <p className={styles.heroSubtitle} data-entry-sub>
+            {t('hero.subtitle')}
+          </p>
+
+          {/* CTA actions */}
+          <div className={styles.heroActions} data-entry-actions>
             <MagneticButton>
               <Button
                 href="https://wa.me/1234567890"
@@ -157,8 +248,8 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             </MagneticButton>
           </div>
 
-          {/* Metrics strip */}
-          <div className={styles.metricsStrip}>
+          {/* Metrics */}
+          <div className={styles.metricsStrip} data-entry-metrics>
             <div className={styles.metric}>
               <span className={styles.metricVal}>{t('hero.metric1_val')}</span>
               <span className={styles.metricLbl}>{t('hero.metric1_lbl')}</span>
@@ -177,7 +268,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
         </div>
 
         {/* Scroll hint */}
-        <div className={styles.scrollHint} aria-hidden="true">
+        <div className={styles.scrollHint} data-entry-scroll aria-hidden="true">
           <div className={styles.scrollLine} />
           <span className={styles.scrollLabel}>scroll</span>
         </div>
@@ -185,7 +276,6 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
 
       {/* ════════════════════════════════════════════════════
           SECTION 2 — SERVICES
-          Enforcing py-32 (128px / 8rem padding block)
       ════════════════════════════════════════════════════ */}
       <section className={`${styles.section} ${styles.sectionServices} py-32`} id="services">
         <div className={styles.sectionInner}>
@@ -195,23 +285,16 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
             <p className={styles.sectionSubtitle}>{t('features.subtitle')}</p>
           </div>
 
-          <div className={styles.servicesGrid} data-reveal="stagger" onMouseMove={handleMouseMove}>
+          <div className={styles.servicesGrid} data-reveal="stagger">
             {services.map((s, i) => (
-              <article key={i} className={styles.serviceCard}>
-                <span className={styles.cardNumber}>0{i + 1}</span>
-                <div className={styles.serviceIcon}>{s.icon}</div>
-                <h3 className={styles.serviceTitle}>{s.title}</h3>
-                <p className={styles.serviceDesc}>{s.description}</p>
-                {renderMicroUI(i)}
-              </article>
+              <ServiceCard key={i} service={s} index={i} renderMicroUI={renderMicroUI} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════════
-          SECTION 3 — PROCESS (RADIAL ORBITAL TIMELINE)
-          Scrub-based interactive section
+          SECTION 3 — PROCESS
       ════════════════════════════════════════════════════ */}
       <section className={`${styles.section} ${styles.sectionProcess} py-32`} id="process">
         <div className="w-full">
@@ -220,8 +303,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
       </section>
 
       {/* ════════════════════════════════════════════════════
-          SECTION 4 — METRICS (BIG NUMBERS)
-          Enforcing py-32 (128px / 8rem padding block)
+          SECTION 4 — METRICS
       ════════════════════════════════════════════════════ */}
       <section className={`${styles.section} ${styles.sectionMetrics} py-32`} id="metrics">
         <div className={styles.sectionInner}>
@@ -248,7 +330,6 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
 
       {/* ════════════════════════════════════════════════════
           SECTION 5 — CTA
-          Enforcing py-32 (128px / 8rem padding block)
       ════════════════════════════════════════════════════ */}
       <section className={`${styles.section} ${styles.sectionCTA} py-32`} id="cta">
         <div className={styles.ctaInner} data-reveal>
@@ -257,12 +338,7 @@ export const ScrollContent = ({ scrollContainerRef, timelineProgress }: ScrollCo
           <p className={styles.ctaSubtitle}>{t('cta.subtitle')}</p>
           <div className={styles.ctaActions}>
             <MagneticButton>
-              <Button
-                href="#contact"
-                variant="primary"
-                size="lg"
-                onClick={playSound}
-              >
+              <Button href="#contact" variant="primary" size="lg" onClick={playSound}>
                 {t('cta.primary')}
               </Button>
             </MagneticButton>
