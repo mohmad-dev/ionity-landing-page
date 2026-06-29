@@ -66,6 +66,7 @@ function sampleTextPoints(text: string, count: number): { x: number; y: number; 
 
 export const ParticleLogo = ({ scrollProgress, timelineProgress }: ParticleLogoProps) => {
   const pointsRef = useRef<THREE.Points>(null);
+  const prevPositions = useRef<Float32Array | null>(null);
 
   // Refs for GSAP-cushioned scroll variables
   const smoothS = useRef(0);
@@ -270,11 +271,11 @@ export const ParticleLogo = ({ scrollProgress, timelineProgress }: ParticleLogoP
       const sy = rand(-2.5, 2.5);
       const sz = rand(-2.5, 2.5);
 
-      // Neon Cyan to Mint Green colors
+      // Soft, professional Emerald Teal to Mint Cyan colors (harmonious and relaxing)
       const colorMix = Math.random();
-      const r = 0.0;
-      const g = colorMix * 1.0 + (1 - colorMix) * 0.9;
-      const b = colorMix * 0.53 + (1 - colorMix) * 1.0;
+      const r = 0.02;
+      const g = 0.72 + colorMix * 0.22;
+      const b = 0.58 + colorMix * 0.22;
 
       const ionityX = ionityPoints[i].x;
       const ionityY = ionityPoints[i].y;
@@ -334,11 +335,11 @@ export const ParticleLogo = ({ scrollProgress, timelineProgress }: ParticleLogoP
       const sy = rand(-3.0, 3.0);
       const sz = rand(-3.0, 3.0);
 
-      // Neon Mint Green colors
+      // Warm, engineering-focused Jade-Mint colors
       const colorMix = Math.random();
-      const r = 0.0;
-      const g = colorMix * 1.0 + (1 - colorMix) * 0.95;
-      const b = colorMix * 0.45 + (1 - colorMix) * 0.35;
+      const r = 0.02;
+      const g = 0.78 + colorMix * 0.16;
+      const b = 0.44 + colorMix * 0.16;
 
       const globalIdx = ringCount + i;
       const ionityX = ionityPoints[globalIdx].x;
@@ -525,6 +526,12 @@ export const ParticleLogo = ({ scrollProgress, timelineProgress }: ParticleLogoP
 
     const posAttr = pointsRef.current.geometry.attributes.position as THREE.BufferAttribute;
 
+    // Initialize previous positions array on first render
+    if (!prevPositions.current) {
+      prevPositions.current = new Float32Array(particleData.positions);
+    }
+    const prevPosArray = prevPositions.current;
+
     const waveX = Math.sin(time * 0.3) * 0.03;
     const waveY = Math.cos(time * 0.2) * 0.03;
 
@@ -541,6 +548,11 @@ export const ParticleLogo = ({ scrollProgress, timelineProgress }: ParticleLogoP
 
     for (let i = 0; i < particleCount; i++) {
       const pt = particleData.data[i];
+
+      // Read previous coordinates
+      const prevX = prevPosArray[i * 3];
+      const prevY = prevPosArray[i * 3 + 1];
+      const prevZ = prevPosArray[i * 3 + 2];
 
       // Local 3D rotation for the wireframe cube (Step 3)
       let cubeX = pt.step3X;
@@ -618,25 +630,40 @@ export const ParticleLogo = ({ scrollProgress, timelineProgress }: ParticleLogoP
         forceZ = Math.sin(time * 6.0 + dist * 3.0) * force * 0.6;
       }
 
-      posAttr.setX(i, finalBaseX + waveX + noiseX + forceX);
-      posAttr.setY(i, finalBaseY + waveY + noiseY + forceY);
-      posAttr.setZ(i, finalBaseZ + noiseX + forceZ);
+      // Calculate new target coordinates
+      const targetX = finalBaseX + waveX + noiseX + forceX;
+      const targetY = finalBaseY + waveY + noiseY + forceY;
+      const targetZ = finalBaseZ + noiseX + forceZ;
+
+      // Apply fluid damping interpolation (lerp)
+      const nextX = prevX + (targetX - prevX) * 0.08;
+      const nextY = prevY + (targetY - prevY) * 0.08;
+      const nextZ = prevZ + (targetZ - prevZ) * 0.08;
+
+      prevPosArray[i * 3] = nextX;
+      prevPosArray[i * 3 + 1] = nextY;
+      prevPosArray[i * 3 + 2] = nextZ;
+
+      posAttr.setX(i, nextX);
+      posAttr.setY(i, nextY);
+      posAttr.setZ(i, nextZ);
     }
 
     posAttr.needsUpdate = true;
 
     const mat = pointsRef.current.material as THREE.PointsMaterial;
     mat.opacity = opacity;
-    mat.size = 0.035 * scale;
     
-    // Smooth dynamic blending mode and color based on scroll background mode
+    // Smooth dynamic blending mode, size, and color based on scroll background mode
     if (s < 0.31) {
-      // Light background: render high-contrast dark green ink particles with NormalBlending
-      mat.color.set('#008c5c');
+      // Light background: render deep pine/emerald green ink cloud with NormalBlending
+      mat.size = 0.022 * scale;
+      mat.color.set('#004d40');
       mat.blending = THREE.NormalBlending;
-      mat.opacity = opacity * 1.1; // slightly higher opacity for text contrast
+      mat.opacity = opacity * 1.15; // slightly higher opacity for contrast on white bg
     } else {
       // Dark background: render glowing cyan/mint additive particles
+      mat.size = 0.016 * scale;
       mat.color.set('#ffffff');
       mat.blending = THREE.AdditiveBlending;
     }
